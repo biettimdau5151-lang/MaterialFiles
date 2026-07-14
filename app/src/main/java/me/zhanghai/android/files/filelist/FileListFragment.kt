@@ -1433,38 +1433,20 @@ class FileListFragment : Fragment(), BreadcrumbLayout.Listener, FileListAdapter.
 
         try {
             val sb = StringBuilder()
-            sb.appendLine("=== Folder: ${folderPath.name} ===")
-            sb.appendLine("Path: ${folderPath.absolutePath}")
-            sb.appendLine("Date: ${java.text.SimpleDateFormat("dd/MM/yyyy HH:mm:ss", java.util.Locale.getDefault()).format(java.util.Date())}")
-            sb.appendLine("=".repeat(50))
-            sb.appendLine()
+            sb.appendLine(folderPath.name)
 
-            var fileCount = 0
-            var dirCount = 0
-
-            folderPath.walkTopDown().forEach { file ->
-                val relativePath = file.relativeTo(folderPath).path
+            folderPath.walkTopDown().forEach { item ->
+                val relativePath = item.relativeTo(folderPath).path
                 if (relativePath.isNotEmpty()) {
-                    if (file.isFile) {
-                        fileCount++
-                        val size = formatFileSize(file.length())
-                        sb.appendLine("F | $relativePath | $size")
-                    } else if (file.isDirectory) {
-                        dirCount++
-                        sb.appendLine("D | $relativePath/")
-                    }
+                    sb.appendLine(relativePath)
                 }
             }
-
-            sb.appendLine()
-            sb.appendLine("=".repeat(50))
-            sb.appendLine("Total: $fileCount files, $dirCount folders")
 
             val outputFile = java.io.File(
                 android.os.Environment.getExternalStoragePublicDirectory(
                     android.os.Environment.DIRECTORY_DOCUMENTS
                 ),
-                "filelist_${folderPath.name}_${System.currentTimeMillis()}.txt"
+                "${folderPath.name}.txt"
             )
             outputFile.writeText(sb.toString())
 
@@ -1472,15 +1454,6 @@ class FileListFragment : Fragment(), BreadcrumbLayout.Listener, FileListAdapter.
         } catch (e: Exception) {
             e.printStackTrace()
             showToast(R.string.file_list_export_error)
-        }
-    }
-
-    private fun formatFileSize(bytes: Long): String {
-        return when {
-            bytes < 1024 -> "$bytes B"
-            bytes < 1024 * 1024 -> "${bytes / 1024} KB"
-            bytes < 1024 * 1024 * 1024 -> "${bytes / (1024 * 1024)} MB"
-            else -> "${bytes / (1024 * 1024 * 1024)} GB"
         }
     }
 
