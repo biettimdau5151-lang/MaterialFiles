@@ -1434,8 +1434,10 @@ class FileListFragment : Fragment(), BreadcrumbLayout.Listener, FileListAdapter.
         try {
             val sb = StringBuilder()
 
-            val files = folderPath.listFiles()?.sortedWith(compareByDescending<File> { it.isDirectory }.thenBy { it.name })
-            files?.forEach { item ->
+            val items = folderPath.listFiles()?.sortedWith(
+                compareByDescending<java.io.File> { it.isDirectory }.thenBy { it.name }
+            )
+            items?.forEach { item ->
                 sb.appendLine(item.name)
             }
 
@@ -1467,8 +1469,10 @@ class FileListFragment : Fragment(), BreadcrumbLayout.Listener, FileListAdapter.
             sb.appendLine("Date: ${java.text.SimpleDateFormat("dd/MM/yyyy HH:mm:ss", java.util.Locale.getDefault()).format(java.util.Date())}")
             sb.appendLine()
 
-            val files = folderPath.listFiles()?.sortedWith(compareByDescending<File> { it.isDirectory }.thenBy { it.name })
-            files?.forEach { item ->
+            val items = folderPath.listFiles()?.sortedWith(
+                compareByDescending<java.io.File> { it.isDirectory }.thenBy { it.name }
+            )
+            items?.forEach { item ->
                 val size = if (item.isFile) formatFileSize(item.length()) else "[DIR]"
                 sb.appendLine("${item.name} | $size")
             }
