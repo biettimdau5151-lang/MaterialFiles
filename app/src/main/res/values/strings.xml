@@ -329,6 +329,10 @@
     <string name="file_item_action_add_bookmark" translatable="false">@string/file_list_action_add_bookmark</string>
     <string name="file_item_action_create_shortcut" translatable="false">@string/file_list_action_create_shortcut</string>
     <string name="file_item_action_properties">Properties</string>
+    <string name="file_item_action_export_list">Export list to TXT</string>
+    <string name="file_list_export_title_format">Folder: %1$s</string>
+    <string name="file_list_export_success">Exported to: %1$s</string>
+    <string name="file_list_export_error">Export failed</string>
 
     <string name="file_properties_title_format">“%1$s” properties</string>
     <string name="file_properties_basic">Basic</string>

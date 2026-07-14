@@ -335,6 +335,7 @@ class FileListAdapter(
         menu.findItem(R.id.action_extract).isVisible = file.isArchiveFile
         menu.findItem(R.id.action_archive).isVisible = !isArchivePath
         menu.findItem(R.id.action_add_bookmark).isVisible = isDirectory
+        menu.findItem(R.id.action_export_list).isVisible = isDirectory
         holder.popupMenu.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.action_open_with -> {
@@ -383,6 +384,10 @@ class FileListAdapter(
                 }
                 R.id.action_properties -> {
                     listener.showPropertiesDialog(file)
+                    true
+                }
+                R.id.action_export_list -> {
+                    listener.exportFolderList(file)
                     true
                 }
                 else -> false
@@ -483,5 +488,6 @@ class FileListAdapter(
         fun addBookmark(file: FileItem)
         fun createShortcut(file: FileItem)
         fun showPropertiesDialog(file: FileItem)
+        fun exportFolderList(file: FileItem)
     }
 }
