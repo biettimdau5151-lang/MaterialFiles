@@ -1433,13 +1433,10 @@ class FileListFragment : Fragment(), BreadcrumbLayout.Listener, FileListAdapter.
 
         try {
             val sb = StringBuilder()
-            sb.appendLine(folderPath.name)
 
-            folderPath.walkTopDown().forEach { item ->
-                val relativePath = item.relativeTo(folderPath).path
-                if (relativePath.isNotEmpty()) {
-                    sb.appendLine(relativePath)
-                }
+            val files = folderPath.listFiles()?.sortedWith(compareByDescending<File> { it.isDirectory }.thenBy { it.name })
+            files?.forEach { item ->
+                sb.appendLine(item.name)
             }
 
             val outputFile = java.io.File(
