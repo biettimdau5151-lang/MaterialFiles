@@ -52,8 +52,13 @@
         android:title="@string/file_item_action_create_shortcut" />
 
     <item
-        android:id="@+id/action_export_list"
-        android:title="@string/file_item_action_export_list"
+        android:id="@+id/action_export_simple"
+        android:title="@string/file_item_action_export_simple"
+        android:visible="false" />
+
+    <item
+        android:id="@+id/action_export_full"
+        android:title="@string/file_item_action_export_full"
         android:visible="false" />
 
     <item

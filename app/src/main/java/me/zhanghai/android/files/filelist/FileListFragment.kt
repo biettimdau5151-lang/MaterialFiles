@@ -1424,7 +1424,7 @@ class FileListFragment : Fragment(), BreadcrumbLayout.Listener, FileListAdapter.
         FilePropertiesDialogFragment.show(file, this)
     }
 
-    override fun exportFolderList(file: FileItem) {
+    override fun exportFolderListSimple(file: FileItem) {
         val folderPath = file.path.toFile()
         if (!folderPath.exists() || !folderPath.isDirectory) {
             showToast(R.string.file_list_export_error)
@@ -1451,6 +1451,49 @@ class FileListFragment : Fragment(), BreadcrumbLayout.Listener, FileListAdapter.
         } catch (e: Exception) {
             e.printStackTrace()
             showToast(R.string.file_list_export_error)
+        }
+    }
+
+    override fun exportFolderListFull(file: FileItem) {
+        val folderPath = file.path.toFile()
+        if (!folderPath.exists() || !folderPath.isDirectory) {
+            showToast(R.string.file_list_export_error)
+            return
+        }
+
+        try {
+            val sb = StringBuilder()
+            sb.appendLine("=== ${folderPath.name} ===")
+            sb.appendLine("Date: ${java.text.SimpleDateFormat("dd/MM/yyyy HH:mm:ss", java.util.Locale.getDefault()).format(java.util.Date())}")
+            sb.appendLine()
+
+            val files = folderPath.listFiles()?.sortedWith(compareByDescending<File> { it.isDirectory }.thenBy { it.name })
+            files?.forEach { item ->
+                val size = if (item.isFile) formatFileSize(item.length()) else "[DIR]"
+                sb.appendLine("${item.name} | $size")
+            }
+
+            val outputFile = java.io.File(
+                android.os.Environment.getExternalStoragePublicDirectory(
+                    android.os.Environment.DIRECTORY_DOCUMENTS
+                ),
+                "${folderPath.name}_full.txt"
+            )
+            outputFile.writeText(sb.toString())
+
+            showToast(getString(R.string.file_list_export_success, outputFile.absolutePath))
+        } catch (e: Exception) {
+            e.printStackTrace()
+            showToast(R.string.file_list_export_error)
+        }
+    }
+
+    private fun formatFileSize(bytes: Long): String {
+        return when {
+            bytes < 1024 -> "$bytes B"
+            bytes < 1024 * 1024 -> "${bytes / 1024} KB"
+            bytes < 1024 * 1024 * 1024 -> "${bytes / (1024 * 1024)} MB"
+            else -> "${bytes / (1024 * 1024 * 1024)} GB"
         }
     }
 
